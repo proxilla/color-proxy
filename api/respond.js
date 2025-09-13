@@ -5,7 +5,7 @@ export default async function handler(req, res) {
       return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const { messages, system, temperature } = req.body || {};
+    const { messages, system, temperature, stream } = req.body || {};
 
     const r = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
@@ -19,7 +19,8 @@ export default async function handler(req, res) {
           ...(system ? [{ role: 'system', content: system }] : []),
           ...(messages ?? [])
         ],
-        temperature: temperature ?? 0.7
+        temperature: temperature ?? 0.7,
+        stream: stream === true
       })
     });
 
